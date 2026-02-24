@@ -1,0 +1,19 @@
+{
+  "name": "school-it-link-hub",
+  "version": "1.0.0",
+  "description": "Professional Node.js backend + frontend for a modular school IT link dashboard.",
+  "main": "src/server.js",
+  "type": "commonjs",
+  "scripts": {
+    "dev": "node src/server.js",
+    "start": "node src/server.js",
+    "test": "node --test"
+  },
+  "keywords": [
+    "node",
+    "dashboard",
+    "school-it"
+  ],
+  "author": "",
+  "license": "MIT"
+}

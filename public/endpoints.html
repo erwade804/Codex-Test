@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>API Endpoint Explorer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="bg-glow bg-glow-pink"></div>
+    <div class="bg-glow bg-glow-blue"></div>
+
+    <main class="container">
+      <header class="hero hero-slim">
+        <p class="eyebrow">Developer Tools</p>
+        <h1>Endpoint Explorer</h1>
+        <p class="subtitle">Test each API endpoint, inspect responses, and copy example request inputs.</p>
+        <div class="toolbar toolbar-inline">
+          <a class="text-link" href="/">← Back to Link Hub</a>
+        </div>
+      </header>
+
+      <section id="endpointGrid" class="dashboard"></section>
+    </main>
+
+    <template id="endpointTemplate">
+      <section class="category-card endpoint-card">
+        <header class="category-header endpoint-header">
+          <h2 class="category-title endpoint-title"></h2>
+          <span class="endpoint-method"></span>
+        </header>
+        <p class="endpoint-path"></p>
+        <p class="category-description endpoint-description"></p>
+
+        <details class="endpoint-example" open>
+          <summary>Example input</summary>
+          <pre class="endpoint-code"></pre>
+        </details>
+
+        <button class="endpoint-run-btn" type="button">Run endpoint</button>
+        <pre class="endpoint-output">No response yet.</pre>
+      </section>
+    </template>
+
+    <script src="endpoints.js"></script>
+  </body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>School IT Link Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="bg-glow bg-glow-pink"></div>
+    <div class="bg-glow bg-glow-blue"></div>
+
+    <main class="container">
+      <header class="hero">
+        <p class="eyebrow">Daily Ops Dashboard</p>
+        <h1>School IT Link Hub</h1>
+        <p class="subtitle">
+          One clean place for your most-used tools. Organized by what you do,
+          not where links came from.
+        </p>
+
+        <div class="toolbar toolbar-inline">
+          <a class="text-link" href="/endpoints.html">Open Endpoint Explorer →</a>
+        </div>
+
+        <div class="toolbar">
+          <label class="search-wrap" for="searchInput">
+            <span>🔎</span>
+            <input
+              id="searchInput"
+              type="search"
+              placeholder="Search links, systems, categories..."
+              aria-label="Search links"
+            />
+          </label>
+        </div>
+      </header>
+
+      <section id="dashboard" class="dashboard" aria-live="polite"></section>
+    </main>
+
+    <template id="categoryTemplate">
+      <section class="category-card">
+        <header class="category-header">
+          <h2 class="category-title"></h2>
+          <p class="category-description"></p>
+        </header>
+        <div class="links-grid"></div>
+      </section>
+    </template>
+
+    <template id="linkTemplate">
+      <a class="link-card" target="_blank" rel="noreferrer noopener">
+        <div>
+          <p class="link-name"></p>
+          <p class="link-meta"></p>
+        </div>
+        <span class="link-arrow">↗</span>
+      </a>
+    </template>
+
+    <script src="script.js"></script>
+  </body>
+</html>

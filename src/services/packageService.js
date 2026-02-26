@@ -12,7 +12,7 @@ const {
 } = require("../config/env");
 
 const PACKAGES_CSV_PATH = path.join(DATA_DIR, "packages.csv");
-const PYTHON_SYNC_SCRIPT_PATH = path.join(__dirname, "..", "python", "csvService.py");
+const PYTHON_SYNC_SCRIPT_PATH = "src/python/csvService.py";
 
 function parseCsv(content) {
   const [headerLine, ...rows] = content
@@ -35,79 +35,31 @@ async function readPackagesCsv() {
   return parseCsv(csv);
 }
 
-function runProcess(command, args, options = {}) {
-  return new Promise((resolve, reject) => {
-    const child = spawn(command, args, { stdio: "pipe", ...options });
-    let stderr = "";
+async function syncPackagesFromPi() {
+  // run the csvservice.py script
+  const python = spawn("python", [PYTHON_SYNC_SCRIPT_PATH]);
 
-    child.stderr.on("data", (chunk) => {
-      stderr += String(chunk);
-    });
+  python.stdout.on("data", (data) => {
+    console.log(`stdout: ${data}`);
+  });
 
-    child.on("error", reject);
+  python.stderr.on("data", (data) => {
+    console.error(`stderr: ${data}`);
+  });
 
-    child.on("close", (code) => {
+  python.on("close", (code) => {
+    console.log(`child process exited with code ${code}`);
+  });
+
+  await new Promise((resolve, reject) => {
+    python.on("close", (code) => {
       if (code === 0) {
         resolve();
-        return;
+      } else {
+        reject(new Error(`Python script exited with code ${code}`));
       }
-
-      reject(new Error(stderr.trim() || `${command} exited with code ${code}`));
     });
   });
-}
-
-async function syncPackagesFromPi() {
-  if (!PI_HOST || !PI_USER) {
-    throw new Error("PI_HOST and PI_USER must be configured");
-  }
-
-  if (!PI_PASSWORD) {
-    throw new Error("PI_PASSWORD must be configured for password auth");
-  }
-
-  await fs.mkdir(DATA_DIR, { recursive: true });
-
-  const askpassPath = path.join(os.tmpdir(), `codex-askpass-${Date.now()}.sh`);
-  const askpassScript = `#!/bin/sh\nprintf '%s\\n' "${PI_PASSWORD.replace(/(["$`\\])/g, "\\$1")}"\n`;
-
-  await fs.writeFile(askpassPath, askpassScript, { mode: 0o700 });
-
-  const scpArgs = [
-    "-P",
-    String(PI_SSH_PORT),
-    "-o",
-    "PubkeyAuthentication=no",
-    "-o",
-    "PreferredAuthentications=password",
-    "-o",
-    "NumberOfPasswordPrompts=1",
-    `${PI_USER}@${PI_HOST}:${PI_CSV_PATH}`,
-    PACKAGES_CSV_PATH
-  ];
-
-  try {
-    await runProcess("setsid", ["-w", "scp", ...scpArgs], {
-      env: {
-        ...process.env,
-        SSH_ASKPASS: askpassPath,
-        SSH_ASKPASS_REQUIRE: "force",
-        DISPLAY: process.env.DISPLAY || "codex:0"
-      }
-    });
-
-    await runProcess(process.env.PYTHON_BIN || "python3", [PYTHON_SYNC_SCRIPT_PATH]);
-
-    return { targetPath: PACKAGES_CSV_PATH };
-  } catch (error) {
-    if (error && error.code === "ENOENT") {
-      throw new Error("OpenSSH tools and Python are required for package sync (missing setsid/scp/python3 on this server).");
-    }
-
-    throw error;
-  } finally {
-    await fs.rm(askpassPath, { force: true });
-  }
 }
 
 module.exports = {

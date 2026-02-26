@@ -47,6 +47,27 @@ const endpointDefinitions = [
         dryRun: true
       }
     }
+  },
+  {
+    name: "List Packages CSV",
+    method: "GET",
+    path: "/api/v1/packages",
+    description: "Returns parsed headers and rows from /data/packages.csv.",
+    exampleInput: { query: {}, body: null }
+  },
+  {
+    name: "Sync Packages CSV from Raspberry Pi",
+    method: "POST",
+    path: "/api/v1/packages/sync",
+    description: "Runs scp/sshpass sync so the latest packages.csv is available locally.",
+    exampleInput: { query: {}, body: {} }
+  },
+  {
+    name: "Packages Web Page",
+    method: "GET",
+    path: "/packages",
+    description: "Renders an HTML table view of /data/packages.csv.",
+    exampleInput: { query: {}, body: null }
   }
 ];
 
@@ -55,6 +76,18 @@ const endpointTemplate = document.querySelector("#endpointTemplate");
 
 function asPrettyJson(value) {
   return JSON.stringify(value, null, 2);
+}
+
+function parseResponseByContentType(contentType, text) {
+  if (!text) {
+    return {};
+  }
+
+  if (contentType.includes("application/json")) {
+    return JSON.parse(text);
+  }
+
+  return { raw: text };
 }
 
 async function runEndpoint(endpoint, outputNode, buttonNode) {
@@ -75,12 +108,14 @@ async function runEndpoint(endpoint, outputNode, buttonNode) {
 
     const response = await fetch(endpoint.path, options);
     const text = await response.text();
-    const parsed = text ? JSON.parse(text) : {};
+    const contentType = response.headers.get("content-type") || "";
+    const parsedBody = parseResponseByContentType(contentType, text);
 
     outputNode.textContent = asPrettyJson({
       status: response.status,
       statusText: response.statusText,
-      body: parsed
+      contentType,
+      body: parsedBody
     });
   } catch (error) {
     outputNode.textContent = asPrettyJson({

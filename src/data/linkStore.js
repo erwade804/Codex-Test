@@ -5,18 +5,6 @@ const categories = [
     description: "Your always-open systems for daily triage and operations.",
     links: [
       {
-        id: "mosyle",
-        name: "Mosyle",
-        url: "https://myschool.mosyle.com/",
-        meta: "Device management platform"
-      },
-      {
-        id: "incident-iq-help-desk",
-        name: "Incident IQ Help Desk",
-        url: "https://oxboe.incidentiq.com",
-        meta: "Primary ticketing portal"
-      },
-      {
         id: "powerschool",
         name: "PowerSchool",
         url: "https://oxfordcs.powerschool.com/admin/home.html",

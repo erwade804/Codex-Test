@@ -3,8 +3,6 @@ const path = require("node:path");
 const { routeApi } = require("./routes");
 
 const PUBLIC_DIR = path.join(__dirname, "..", "public");
-const LEGACY_PUBLIC_DIR = path.join(PUBLIC_DIR, "legacy");
-
 const CONTENT_TYPES = {
   ".css": "text/css; charset=utf-8",
   ".html": "text/html; charset=utf-8",

@@ -5,6 +5,18 @@ const categories = [
     description: "Your always-open systems for daily triage and operations.",
     links: [
       {
+        id: "mosyle",
+        name: "Mosyle",
+        url: "https://myschool.mosyle.com/",
+        meta: "Device management platform"
+      },
+      {
+        id: "incident-iq-help-desk",
+        name: "Incident IQ Help Desk",
+        url: "https://oxboe.incidentiq.com",
+        meta: "Primary ticketing portal"
+      },
+      {
         id: "powerschool",
         name: "PowerSchool",
         url: "https://www.powerschool.com/",
@@ -15,18 +27,6 @@ const categories = [
         name: "Google Drive",
         url: "https://drive.google.com/",
         meta: "Files, docs, and shared folders"
-      },
-      {
-        id: "incident-iq",
-        name: "Incident IQ",
-        url: "https://www.incidentiq.com/",
-        meta: "Help desk tickets and asset context"
-      },
-      {
-        id: "mosyle",
-        name: "Mosyle",
-        url: "https://my.mosyle.com/",
-        meta: "Apple device management"
       }
     ]
   },
@@ -50,21 +50,33 @@ const categories = [
     ]
   },
   {
-    id: "local-team-resources",
-    title: "Local + Team Resources",
-    description: "District-specific tools, docs, and internal references.",
+    id: "legacy-ops-links",
+    title: "Legacy Ops Links",
+    description: "Former legacy-home shortcuts now organized in the modern dashboard.",
     links: [
       {
-        id: "brads-site",
-        name: "Brad's Site",
-        url: "https://example.local/",
-        meta: "Local documentation or utilities"
+        id: "brads-desk",
+        name: "Brad's Desk",
+        url: "http://ws-wh-brad/iiq",
+        meta: "Local Incident IQ endpoint"
       },
       {
-        id: "master-ops-sheet",
-        name: "Master Operations Sheet",
-        url: "#",
-        meta: "Replace with your Google Sheet URL"
+        id: "it-drive-shared",
+        name: "IT Drive",
+        url: "https://drive.google.com/drive/folders/0AL8p7-QY94qTUk9PVA",
+        meta: "Shared Google Drive resources"
+      },
+      {
+        id: "cards-sandbox",
+        name: "Cards",
+        url: "http://srv-boe-sandbox:85/",
+        meta: "Sandbox cards utility"
+      },
+      {
+        id: "lifelink",
+        name: "LifeLink",
+        url: "https://lifelink.lifenetsystems.com/",
+        meta: "AED support portal"
       }
     ]
   }

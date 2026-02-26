@@ -70,6 +70,11 @@ test("API routes work", async () => {
   assert.equal(one.body.data.id, "security-filtering");
 
 
+  const legacyOpsCategory = categories.body.data.find((category) => category.id === "legacy-ops-links");
+  assert.ok(legacyOpsCategory);
+  assert.equal(legacyOpsCategory.title, "Legacy Ops Links");
+  assert.ok(legacyOpsCategory.links.some((link) => link.name === "LifeLink"));
+
   const endpointPage = await makeRequest(server, "GET", "/endpoints.html");
   assert.equal(endpointPage.status, 200);
   assert.match(endpointPage.body, /Endpoint Explorer/);

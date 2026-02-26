@@ -11,6 +11,7 @@ A full Node.js project for managing school IT links with a backend API and a cle
 - `src/services/` → reusable business/scaffolding logic
 - `src/data/` → in-memory data store
 - `public/` → frontend dashboard files
+- `public/legacy/` → legacy static frontend served by Node at `/legacy/`
 - `tests/` → automated API/service tests
 
 ## API Endpoints
@@ -57,6 +58,7 @@ npm run dev
 
 Then open `http://localhost:4173`.
 
+Legacy page is also available at `http://localhost:4173/legacy/`.
 
 ## Endpoint Explorer UI
 

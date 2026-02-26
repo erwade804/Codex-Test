@@ -1,0 +1,414 @@
+:root {
+    --bg: #050508;
+    --panel: #0b0b14;
+    --pink: #ff2fa4;
+    --pink-glow: 0 0 10px #ff2fa4;
+    --text: #eaeaff;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: "Segoe UI", system-ui, sans-serif;
+}
+
+body {
+    margin: 0;
+    background: radial-gradient(circle at top, #0b0b18, var(--bg));
+    color: var(--text);
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #222;
+}
+
+h1 {
+    color: var(--pink);
+    text-shadow: var(--pink-glow);
+    letter-spacing: 2px;
+}
+
+button {
+    background: transparent;
+    color: var(--pink);
+    border: 1px solid var(--pink);
+    padding: 6px 12px;
+    cursor: pointer;
+    box-shadow: var(--pink-glow);
+}
+
+button:hover {
+    background: var(--pink);
+    color: black;
+}
+
+main {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+    padding: 20px;
+}
+
+.computer-card {
+    background: var(--panel);
+    padding: 16px;
+    border: 1px solid #222;
+    box-shadow: 0 0 20px rgba(255, 47, 164, 0.15);
+}
+
+.computer-card input,
+.computer-card textarea,
+.computer-card select {
+    width: 100%;
+    margin-bottom: 8px;
+    background: black;
+    color: var(--text);
+    border: 1px solid #333;
+    padding: 6px;
+}
+
+.checklist h4 {
+    margin: 8px 0;
+    color: var(--pink);
+}
+
+.checklist .item {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.checklist .item span.done {
+    text-decoration: line-through;
+    opacity: 0.6;
+}
+
+.delete {
+    margin-top: 10px;
+    border-color: #ff4444;
+    color: #ff4444;
+    box-shadow: 0 0 8px #ff4444;
+}
+
+.scanlines {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background:
+        repeating-linear-gradient(to bottom,
+            rgba(255, 255, 255, 0.02),
+            rgba(255, 255, 255, 0.02) 1px,
+            transparent 1px,
+            transparent 3px);
+    animation: scan 6s linear infinite;
+    z-index: 9999;
+}
+
+@keyframes scan {
+    from {
+        background-position-y: 0;
+    }
+
+    to {
+        background-position-y: 100%;
+    }
+}
+
+.hud-header {
+    position: relative;
+    padding: 24px 32px;
+    background: linear-gradient(to right,
+            rgba(255, 47, 164, 0.05),
+            rgba(0, 0, 0, 0),
+            rgba(255, 47, 164, 0.05));
+    border-bottom: 1px solid #222;
+}
+
+.hud-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.title-block h1 {
+    margin: 0;
+    font-size: 20px;
+    letter-spacing: 3px;
+    color: var(--pink);
+    text-shadow: 0 0 12px rgba(255, 47, 164, 0.6);
+}
+
+.subtitle {
+    font-size: 11px;
+    letter-spacing: 2px;
+    opacity: 0.6;
+}
+
+.hud-line {
+    position: absolute;
+    left: 16px;
+    right: 16px;
+    height: 1px;
+    background: linear-gradient(to right,
+            transparent,
+            var(--pink),
+            transparent);
+    box-shadow: 0 0 8px rgba(255, 47, 164, 0.6);
+}
+
+.hud-line.top {
+    top: 8px;
+}
+
+.hud-line.bottom {
+    bottom: 8px;
+}
+
+.computer-card {
+    position: relative;
+}
+
+.computer-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: 1px solid rgba(255, 47, 164, 0.2);
+    pointer-events: none;
+}
+
+.checklist {
+    margin-top: 12px;
+    border-top: 1px solid #222;
+    padding-top: 10px;
+}
+
+.checklist-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    letter-spacing: 2px;
+    opacity: 0.7;
+    margin-bottom: 8px;
+}
+
+.checklist-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.checklist-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px;
+    border-bottom: 1px solid #111;
+}
+
+.checklist-item:hover {
+    background: rgba(255, 47, 164, 0.05);
+}
+
+.checklist-item.done {
+    opacity: 0.45;
+}
+
+.checklist-item.done .text {
+    text-decoration: line-through;
+}
+
+.checklist-item .text {
+    flex: 1;
+    cursor: text;
+}
+
+.checklist-item input[type="checkbox"] {
+    accent-color: var(--pink);
+}
+
+.checklist-item button {
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.checklist-item:hover button {
+    opacity: 1;
+}
+
+.new-task {
+    margin-top: 8px;
+    background: black;
+    border: 1px dashed #333;
+}
+
+/* ===== Background Sparkles ===== */
+.background-stars {
+    position: fixed;
+    inset: 0;
+    background:
+        radial-gradient(1px 1px at 10% 20%, #ff2fa4 50%, transparent 51%),
+        radial-gradient(1px 1px at 70% 40%, #ff2fa4 50%, transparent 51%),
+        radial-gradient(1px 1px at 30% 80%, #ff2fa4 50%, transparent 51%),
+        radial-gradient(1px 1px at 90% 60%, #ff2fa4 50%, transparent 51%);
+    animation: drift 20s linear infinite;
+    opacity: 0.25;
+    pointer-events: none;
+    z-index: -2;
+}
+
+@keyframes drift {
+    from {
+        transform: translateY(0);
+    }
+
+    to {
+        transform: translateY(-200px);
+    }
+}
+
+/* ===== Layout ===== */
+.layout {
+    display: grid;
+    grid-template-columns: 1fr 220px;
+}
+
+.sidebar {
+    border-left: 1px solid #222;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.6);
+}
+
+.sidebar-title {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--pink);
+    margin-bottom: 8px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar li {
+    padding: 6px;
+    cursor: pointer;
+    border-bottom: 1px solid #111;
+}
+
+.sidebar li:hover {
+    background: rgba(255, 47, 164, 0.1);
+}
+
+.sidebar li.active {
+    box-shadow: inset 0 0 0 1px var(--pink);
+}
+
+/* ===== Highlighted Card ===== */
+.computer-card.active {
+    box-shadow: 0 0 25px rgba(255, 47, 164, 0.6);
+}
+
+/* ===== Header Actions ===== */
+.header-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.import-btn {
+    border: 1px solid var(--pink);
+    padding: 6px 12px;
+    cursor: pointer;
+    color: var(--pink);
+}
+
+/* ===== Starfield Background ===== */
+.starfield {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -3;
+    overflow: hidden;
+}
+
+.star {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    opacity: 0;
+    transform: rotate(45deg);
+
+    background: radial-gradient(circle,
+            rgba(255, 200, 230, 1) 0%,
+            rgba(255, 47, 164, 0.9) 40%,
+            rgba(255, 47, 164, 0.4) 65%,
+            transparent 75%);
+
+    box-shadow:
+        0 0 10px rgba(255, 47, 164, 0.8),
+        0 0 22px rgba(255, 47, 164, 0.4),
+        0 0 40px rgba(255, 47, 164, 0.2);
+
+    animation: starLife linear forwards;
+}
+
+/* vertical spike */
+.star::before,
+.star::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    background: linear-gradient(to end,
+            transparent,
+            rgba(255, 180, 220, 1),
+            transparent);
+    opacity: 0.8;
+}
+
+/* north-south */
+.star::before {
+    width: 2px;
+    height: 220%;
+    transform: translate(-50%, -50%);
+}
+
+/* east-west */
+.star::after {
+    height: 2px;
+    width: 220%;
+    transform: translate(-50%, -50%);
+}
+
+@keyframes starLife {
+    0% {
+        opacity: 0;
+        transform: rotate(45deg) scale(0.5);
+    }
+
+    20% {
+        opacity: 1;
+        transform: rotate(45deg) scale(1);
+    }
+
+    45% {
+        transform: rotate(45deg) scale(1.05);
+    }
+
+    60% {
+        transform: rotate(45deg) scale(0.98);
+    }
+
+    80% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        transform: rotate(45deg) scale(0.4);
+    }
+}

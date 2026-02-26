@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Device Checklist</title>
+
+  <style>
+    :root {
+      --bg: #0b0b0b;
+      --panel: #141414;
+      --pink: #ff7ac6;
+      --pink-soft: #ff9bd8;
+      --border: #2a2a2a;
+      --text: #f2f2f2;
+      --warn: #ffb3c7;
+      --done: #4dffb3;
+
+      /* 🔧 HIGHLIGHT TUNING */
+      --sweep-time: 0.5s;
+      /* how long one sweep takes */
+      --sweep-delay: .2s;
+      /* delay between sweeps */
+    }
+
+
+    .card {
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* shared sweep look */
+    .card::after,
+    .card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -60%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(120deg,
+          transparent,
+          rgba(255, 122, 198, .28),
+          transparent);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* first sweep */
+    .card.highlight::after {
+      animation: sweepOnce var(--sweep-time) ease-out;
+    }
+
+    /* second sweep (offset) */
+    .card.highlight::before {
+      animation:
+        sweepOnce var(--sweep-time) ease-out;
+      animation-delay: var(--sweep-delay);
+    }
+
+    @keyframes sweepOnce {
+      0% {
+        left: -60%;
+        opacity: 0;
+      }
+
+      15% {
+        opacity: 1;
+      }
+
+      100% {
+        left: 120%;
+        opacity: 0;
+      }
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    /* ===== TOP BAR ===== */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: #0f0f0f;
+      border-bottom: 1px solid var(--border);
+      padding: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    /* ===== TABS ===== */
+    .tabs {
+      position: sticky;
+      top: 56px;
+      z-index: 999;
+      display: flex;
+      gap: 8px;
+      padding: 8px 16px;
+      background: #0f0f0f;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tab {
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      border: 1px solid var(--border);
+    }
+
+    .tab.active {
+      background: var(--pink);
+      color: black;
+      border-color: var(--pink);
+    }
+
+    input,
+    button,
+    textarea {
+      background: #111;
+      color: var(--text);
+      border: 1px solid var(--pink);
+      border-radius: 6px;
+      padding: 8px;
+      font-size: 14px;
+    }
+
+    button:hover {
+      background: var(--pink);
+      color: black;
+      cursor: pointer;
+    }
+
+    .undo {
+      border-color: var(--warn);
+      color: var(--warn);
+    }
+
+    .reset {
+      border-color: #ff4d6d;
+      color: #ff4d6d;
+    }
+
+    /* ===== LAYOUT ===== */
+    .main {
+      display: flex;
+      min-height: 100vh;
+      padding-bottom: 70px;
+    }
+
+    .cards {
+      flex: 1;
+      padding: 16px;
+    }
+
+    .instructions {
+      width: 320px;
+      border-left: 1px solid var(--border);
+      padding: 16px;
+      background: #0f0f0f;
+    }
+
+    .sidebar {
+      width: 200px;
+      border-left: 1px solid var(--border);
+      padding: 12px;
+      background: #0f0f0f;
+      overflow-y: auto;
+    }
+
+    /* ===== CARD ===== */
+    .card {
+      background: var(--panel);
+      border-left: 4px solid var(--pink);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 16px;
+    }
+
+    .card.done {
+      border-left-color: var(--done);
+      opacity: .8;
+    }
+
+    .card.collapsed .card-body {
+      display: none;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--pink-soft);
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .status-done {
+      color: var(--done);
+      font-size: 12px;
+      margin-left: 8px;
+    }
+
+    .comment {
+      margin: 8px 0;
+    }
+
+    .comment textarea {
+      width: 100%;
+      min-height: 50px;
+    }
+
+    .task {
+      display: flex;
+      justify-content: space-between;
+      padding: 6px;
+      cursor: pointer;
+    }
+
+    .task:hover {
+      background: #1b1b1b
+    }
+
+    .task input {
+      pointer-events: none
+    }
+
+    .delete {
+      background: transparent;
+      border: 1px solid #ff4d6d;
+      color: #ff4d6d;
+    }
+
+    .restore {
+      border-color: var(--done);
+      color: var(--done);
+    }
+
+    /* ===== INSTRUCTIONS ===== */
+    .instructions h3 {
+      color: var(--pink)
+    }
+
+    .instruction-step {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+
+    .step-label {
+      font-size: 13px;
+      font-weight: bold;
+      color: var(--pink-soft);
+    }
+
+    /* ===== JUMP ===== */
+    .nav-item {
+      padding: 8px;
+      cursor: pointer;
+      color: var(--pink-soft);
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    .nav-item:hover {
+      background: var(--pink);
+      color: black;
+    }
+
+    /* ===== MOBILE ===== */
+    @media(max-width:900px) {
+      .main {
+        flex-direction: column
+      }
+
+      .instructions {
+        width: 100%;
+        border: none;
+      }
+
+      .sidebar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        display: flex;
+        gap: 8px;
+        overflow-x: auto;
+        border-top: 1px solid var(--border);
+        z-index: 999;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="topbar">
+    <input id="numberInput" placeholder="4 or 8 digit number" inputmode="numeric" pattern="[0-9]*"
+      onkeydown="handleEnter(event)">
+    <button onclick="addNumber()">Add</button>
+    <button onclick="exportData()">Export</button>
+    <button onclick="exportNumbersCSV()">Export Numbers</button>
+    <button onclick="document.getElementById('importFile').click()">Import</button>
+    <button class="undo" onclick="undoDelete()">Undo</button>
+    <button class="reset" onclick="resetAll()">Reset</button>
+    <input type="file" id="importFile" hidden onchange="importData(event)">
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="setTab('active')">Active</div>
+    <div class="tab" onclick="setTab('done')">Done</div>
+    <div class="tab" onclick="setTab('all')">All</div>
+  </div>
+
+  <div class="main">
+    <div class="cards" id="list"></div>
+    <div class="instructions">
+      <h3>Checklist Steps</h3>
+      <button onclick="addStep()">+ Step</button>
+      <button onclick="removeStep()">− Step</button>
+      <div id="instructionList"></div>
+    </div>
+    <div class="sidebar" id="nav"></div>
+  </div>
+
+  <script>
+    const DATA_KEY = "deviceChecklist";
+    const INST_KEY = "checkInstructions";
+
+    let data = [];
+    let instructions = [];
+    let lastDeleted = null;
+    let currentTab = "active";
+
+    const list = document.getElementById("list");
+    const nav = document.getElementById("nav");
+    const instructionList = document.getElementById("instructionList");
+    const numberInput = document.getElementById("numberInput");
+
+    function handleEnter(e) {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        addNumber();
+      }
+    }
+
+    function exportNumbersCSV() {
+      const numbers = data.map(d => d.number).join(",");
+      const blob = new Blob([numbers], { type: "text/plain" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "computer-numbers.txt";
+      a.click();
+    }
+
+    function resetAll() {
+      if (!confirm(
+        "This will delete ALL devices and checklist steps.\n\nThis cannot be undone.\n\nAre you sure?"
+      )) return;
+
+      data = [];
+      instructions = [""];
+      lastDeleted = null;
+      localStorage.removeItem(DATA_KEY);
+      localStorage.removeItem(INST_KEY);
+      render();
+    }
+
+    /* ----- rest of your existing JS is unchanged ----- */
+
+    function setTab(tab) {
+      currentTab = tab;
+      document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+      document.querySelector(
+        `.tab:nth-child(${tab === "active" ? 1 : tab === "done" ? 2 : 3})`
+      ).classList.add("active");
+      render();
+    }
+
+    function normalizeTasks() {
+      data.forEach(item => {
+        if (!Array.isArray(item.tasks)) item.tasks = [];
+        while (item.tasks.length < instructions.length) item.tasks.push(false);
+        if (item.tasks.length > instructions.length)
+          item.tasks.length = instructions.length;
+      });
+    }
+
+    function load() {
+      data = JSON.parse(localStorage.getItem(DATA_KEY) || "[]");
+      instructions = JSON.parse(localStorage.getItem(INST_KEY) || '[""]');
+      render();
+    }
+
+    function save() {
+      localStorage.setItem(DATA_KEY, JSON.stringify(data));
+      localStorage.setItem(INST_KEY, JSON.stringify(instructions));
+    }
+
+    function render() {
+      normalizeTasks();
+      list.innerHTML = "";
+      nav.innerHTML = "";
+      instructionList.innerHTML = "";
+
+      instructions.forEach((t, i) => {
+        instructionList.innerHTML += `
+      <div class="instruction-step">
+        <div class="step-label">Step ${i + 1}</div>
+        <textarea oninput="updateInstruction(${i})">${t}</textarea>
+      </div>`;
+      });
+
+      data.forEach((item, idx) => {
+        const isDone = item.tasks.every(v => v === true);
+
+        if (
+          (currentTab === "active" && isDone) ||
+          (currentTab === "done" && !isDone)
+        ) return;
+
+        const card = document.createElement("div");
+        card.className = "card" + (isDone ? " done collapsed" : "");
+
+        card.innerHTML = `
+      <div class="header">
+        <div>
+          ${item.number}
+          ${isDone ? '<span class="status-done">✔ Completed</span>' : ""}
+        </div>
+        ${isDone
+            ? `<button class="restore">Restore</button>`
+            : `<button class="delete">Delete</button>`}
+      </div>
+
+      <div class="card-body">
+        <div class="comment">
+          <textarea ${isDone ? "disabled" : ""}
+            oninput="updateComment(${idx},this.value)">${item.comment || ""}</textarea>
+        </div>
+
+        ${instructions.map((_, i) => `
+          <div class="task" onclick="${isDone ? "" : `toggle(${idx},${i})`}">
+            Step ${i + 1}
+            <input type="checkbox"
+              ${item.tasks[i] === true ? "checked" : ""}
+              ${isDone ? "disabled" : ""}>
+          </div>`).join("")}
+      </div>
+    `;
+
+        card.querySelector(".header").onclick = e => {
+          if (e.target.tagName === "BUTTON") return;
+          card.classList.toggle("collapsed");
+        };
+
+        card.querySelector("button").onclick = e => {
+          e.stopPropagation();
+          if (isDone) {
+            item.tasks.fill(false);
+          } else {
+            lastDeleted = { item, idx };
+            data.splice(idx, 1);
+          }
+          save(); render();
+        };
+
+        list.appendChild(card);
+
+        const navItem = document.createElement("div");
+        navItem.className = "nav-item";
+        navItem.textContent = item.number;
+        navItem.onclick = () => {
+          const topOffset =
+            document.querySelector(".topbar").offsetHeight +
+            document.querySelector(".tabs").offsetHeight + 10;
+
+          const y =
+            card.getBoundingClientRect().top +
+            window.pageYOffset -
+            topOffset;
+
+          window.scrollTo({ top: y, behavior: "smooth" });
+
+          // remove highlight from all cards
+          document.querySelectorAll(".card").forEach(c =>
+            c.classList.remove("highlight")
+          );
+
+          // force reflow so animation can restart
+          void card.offsetWidth;
+
+          // add highlight
+          card.classList.add("highlight");
+
+        };
+
+        nav.appendChild(navItem);
+      });
+    }
+
+    function addNumber() {
+      const val = numberInput.value.trim();
+      if (!/^\d{4}$|^\d{8}$/.test(val)) return;
+      if (data.some(d => d.number === val)) return;
+
+      data.push({
+        number: val,
+        comment: "",
+        tasks: Array(instructions.length).fill(false)
+      });
+
+      numberInput.value = "";
+      save(); render();
+    }
+
+    function toggle(idx, i) {
+      data[idx].tasks[i] = !data[idx].tasks[i];
+      save(); render();
+    }
+
+    function updateComment(idx, val) {
+      data[idx].comment = val;
+      save();
+    }
+
+    function undoDelete() {
+      if (!lastDeleted) return;
+      data.splice(lastDeleted.idx, 0, lastDeleted.item);
+      lastDeleted = null;
+      save(); render();
+    }
+
+    function addStep() {
+      instructions.push("");
+      data.forEach(d => d.tasks.push(false));
+      save(); render();
+    }
+
+    function removeStep() {
+      if (instructions.length <= 1) return;
+      instructions.pop();
+      data.forEach(d => d.tasks.pop());
+      save(); render();
+    }
+
+    function updateInstruction(i) {
+      instructions[i] = instructionList.querySelectorAll("textarea")[i].value;
+      save();
+    }
+
+    function exportData() {
+      const blob = new Blob(
+        [JSON.stringify({ data, instructions }, null, 2)],
+        { type: "application/json" }
+      );
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "device-checklist.json";
+      a.click();
+    }
+
+    function importData(e) {
+      const f = e.target.files[0];
+      if (!f) return;
+      const r = new FileReader();
+      r.onload = ev => {
+        const p = JSON.parse(ev.target.result);
+        data = p.data || [];
+        instructions = p.instructions || [""];
+        save(); load();
+      };
+      r.readAsText(f);
+    }
+
+    load();
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Computer Project Tracker</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+    <header>
+        <div id="projectTabs"></div>
+        <button id="addProjectBtn">+ Project</button>
+    </header>
+
+    <main>
+        <section id="projectPanel">
+            <h2 id="projectTitle"></h2>
+            <textarea id="projectDescription" placeholder="Project description..."></textarea>
+
+            <div class="controls">
+                <button id="exportProject">Export Project</button>
+                <label class="importBtn">
+                    Import Project
+                    <input type="file" id="importProject" accept="application/json" hidden>
+                </label>
+                <button id="copyComputers">Copy Computer Numbers</button>
+                <button id="deleteProject">Delete Project</button>
+            </div>
+
+            <h3>Project Issues</h3>
+            <div id="projectIssues"></div>
+            <input id="newProjectIssue" placeholder="Add project issue">
+            <button id="addProjectIssue">Add Issue</button>
+        </section>
+
+        <section id="computerPanel">
+            <h3>Computer</h3>
+            <input id="newComputerId" placeholder="4–8 digit computer number">
+            <button id="addComputer">Add Computer</button>
+
+            <div id="computerIssues"></div>
+
+            <input id="newComputerIssue" placeholder="Add issue to this computer">
+            <button id="addComputerIssue">Add Issue</button>
+        </section>
+
+        <aside id="computerList"></aside>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

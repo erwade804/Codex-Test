@@ -1,0 +1,212 @@
+:root {
+    --pink: #ff4fc3;
+    --pink-soft: rgba(255, 79, 195, 0.2);
+    --bg: #0a0a0a;
+    --panel: #111;
+    --border: rgba(255, 79, 195, 0.35);
+}
+
+* {
+    box-sizing: border-box;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body {
+    margin: 0;
+    background: radial-gradient(circle at top, #140014, var(--bg));
+    color: var(--pink);
+    height: 100vh;
+}
+
+/* ---------- Header / Projects ---------- */
+
+header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: linear-gradient(to bottom, #0f0010, #090009);
+    border-bottom: 1px solid var(--border);
+}
+
+#projectTabs {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+#projectTabs button {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--pink);
+    padding: 6px 12px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background .15s, transform .1s;
+}
+
+#projectTabs button:hover {
+    background: var(--pink-soft);
+}
+
+#projectTabs button.active {
+    background: var(--pink);
+    color: black;
+    font-weight: 600;
+}
+
+#addProjectBtn {
+    margin-left: auto;
+}
+
+/* ---------- Layout ---------- */
+
+main {
+    display: grid;
+    grid-template-columns: minmax(320px, 1.2fr) minmax(320px, 1.5fr) 260px;
+    height: calc(100vh - 56px);
+}
+
+/* ---------- Panels ---------- */
+
+section,
+aside {
+    padding: 16px 18px;
+    overflow-y: auto;
+}
+
+section {
+    background: linear-gradient(to bottom, var(--panel), #0c0c0c);
+}
+
+#computerPanel {
+    background: linear-gradient(to bottom, #0e0010, #090009);
+    border-left: 1px solid var(--border);
+}
+
+aside {
+    background: linear-gradient(to bottom, #0b000b, #070007);
+    border-left: 1px solid var(--border);
+}
+
+/* ---------- Inputs ---------- */
+
+textarea,
+input {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    color: var(--pink);
+    border: 1px solid var(--border);
+    padding: 8px 10px;
+    border-radius: 8px;
+    outline: none;
+    transition: border .15s, box-shadow .15s;
+}
+
+textarea:focus,
+input:focus {
+    border-color: var(--pink);
+    box-shadow: 0 0 0 2px var(--pink-soft);
+}
+
+textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+/* ---------- Buttons ---------- */
+
+button,
+.importBtn {
+    background: linear-gradient(to bottom, var(--pink), #ff2aa8);
+    color: black;
+    border: none;
+    padding: 7px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: transform .1s, box-shadow .1s, opacity .1s;
+}
+
+button:hover,
+.importBtn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(255, 79, 195, .35);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+/* ---------- Controls ---------- */
+
+.controls {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+}
+
+/* ---------- Issues ---------- */
+
+.issue {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 8px;
+    border-radius: 8px;
+    transition: background .12s;
+}
+
+.issue:hover {
+    background: rgba(255, 79, 195, .06);
+}
+
+.issue span {
+    flex: 1;
+}
+
+.issue button {
+    background: transparent;
+    color: var(--pink);
+    padding: 0 6px;
+}
+
+/* ---------- Computer List ---------- */
+
+#computerList {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+#computerList div {
+    padding: 8px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    background: rgba(255, 79, 195, .04);
+    transition: background .12s, transform .1s;
+}
+
+#computerList div:hover {
+    background: rgba(255, 79, 195, .12);
+}
+
+#computerList div.active {
+    background: var(--pink);
+    color: black;
+    font-weight: 700;
+}
+
+/* ---------- Headings ---------- */
+
+h2,
+h3 {
+    margin-top: 0;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+h3 {
+    opacity: .85;
+}

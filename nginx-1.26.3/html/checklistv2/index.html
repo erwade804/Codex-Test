@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>System Maintenance Bay</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <div class="starfield"></div>
+
+  <div class="background-stars"></div>
+  <div class="scanlines"></div>
+
+  <header class="hud-header">
+    <div class="hud-line top"></div>
+
+    <div class="hud-content">
+      <div class="title-block">
+        <h1>SYSTEM MAINTENANCE BAY</h1>
+        <span class="subtitle">LOCAL TASK MATRIX · OFFLINE CACHE</span>
+      </div>
+
+      <div class="header-actions">
+        <button id="copyNamesBtn">COPY NAMES</button>
+        <button id="exportJsonBtn">EXPORT JSON</button>
+        <label class="import-btn">
+          IMPORT JSON
+          <input type="file" id="importJsonInput" hidden />
+        </label>
+        <button id="addComputerBtn">ADD UNIT</button>
+      </div>
+    </div>
+
+    <div class="hud-line bottom"></div>
+  </header>
+
+  <div class="layout">
+    <main id="computerList"></main>
+
+    <aside class="sidebar">
+      <div class="sidebar-title">UNIT INDEX</div>
+      <ul id="unitIndex"></ul>
+    </aside>
+  </div>
+
+  <template id="computerTemplate">
+    <div class="computer-card">
+      <input class="computer-name" placeholder="Computer name" />
+      <select class="computer-state">
+        <option>Todo</option>
+        <option>In Progress</option>
+        <option>Waiting</option>
+        <option>Completed</option>
+      </select>
+
+      <textarea class="computer-issues" placeholder="Issues / Notes"></textarea>
+
+      <div class="checklist">
+        <div class="checklist-header">
+          <span>TASK MATRIX</span>
+          <span class="count"></span>
+        </div>
+
+        <ul class="checklist-items"></ul>
+        <input class="new-task" placeholder="Add task and press Enter" />
+      </div>
+
+      <button class="delete">DELETE UNIT</button>
+    </div>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+
+</html>

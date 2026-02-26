@@ -59,7 +59,7 @@ const endpointDefinitions = [
     name: "Sync Packages CSV from Raspberry Pi",
     method: "POST",
     path: "/api/v1/packages/sync",
-    description: "Runs scp/sshpass sync so the latest packages.csv is available locally.",
+    description: "Runs password-authenticated scp sync so the latest packages.csv is available locally.",
     exampleInput: { query: {}, body: {} }
   },
   {

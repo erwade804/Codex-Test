@@ -1,5 +1,6 @@
 const fs = require("node:fs/promises");
 const path = require("node:path");
+const os = require("node:os");
 const { spawn } = require("node:child_process");
 const {
   DATA_DIR,
@@ -7,8 +8,7 @@ const {
   PI_USER,
   PI_PASSWORD,
   PI_CSV_PATH,
-  PI_SSH_PORT,
-  PI_SSH_KEY_PATH
+  PI_SSH_PORT
 } = require("../config/env");
 
 const PACKAGES_CSV_PATH = path.join(DATA_DIR, "packages.csv");
@@ -34,56 +34,77 @@ async function readPackagesCsv() {
   return parseCsv(csv);
 }
 
-function syncPackagesFromPi() {
+function runProcess(command, args, options = {}) {
   return new Promise((resolve, reject) => {
-    if (!PI_HOST || !PI_USER) {
-      reject(new Error("PI_HOST and PI_USER must be configured"));
-      return;
-    }
+    const child = spawn(command, args, { stdio: "pipe", ...options });
+    let stderr = "";
 
-    if (!PI_PASSWORD) {
-      reject(new Error("Provide PI_PASSWORD to authenticate to Raspberry Pi"));
-      return;
-    }
+    child.stderr.on("data", (chunk) => {
+      stderr += String(chunk);
+    });
 
-    fs.mkdir(DATA_DIR, { recursive: true })
-      .then(() => {
-        const scpArgs = ["-P", String(PI_SSH_PORT)];
+    child.on("error", reject);
 
-        scpArgs.push(`${PI_USER}@${PI_HOST}:${PI_CSV_PATH}`, PACKAGES_CSV_PATH);
+    child.on("close", (code) => {
+      if (code === 0) {
+        resolve();
+        return;
+      }
 
-        const command = PI_PASSWORD ? "sshpass" : "scp";
-        const args = PI_PASSWORD
-          ? ["-p", PI_PASSWORD, "scp", ...scpArgs]
-          : scpArgs;
-
-        const child = spawn(command, args, { stdio: "pipe" });
-        let stderr = "";
-
-        child.stderr.on("data", (chunk) => {
-          stderr += String(chunk);
-        });
-
-        child.on("error", (error) => {
-          if (PI_PASSWORD && error.code === "ENOENT") {
-            reject(new Error("sshpass is required for password auth. Install sshpass on this server."));
-            return;
-          }
-
-          reject(error);
-        });
-
-        child.on("close", (code) => {
-          if (code === 0) {
-            resolve({ targetPath: PACKAGES_CSV_PATH });
-            return;
-          }
-
-          reject(new Error(stderr.trim() || `scp exited with code ${code}`));
-        });
-      })
-      .catch(reject);
+      reject(new Error(stderr.trim() || `${command} exited with code ${code}`));
+    });
   });
+}
+
+async function syncPackagesFromPi() {
+  if (!PI_HOST || !PI_USER) {
+    throw new Error("PI_HOST and PI_USER must be configured");
+  }
+
+  if (!PI_PASSWORD) {
+    throw new Error("PI_PASSWORD must be configured for password auth");
+  }
+
+  await fs.mkdir(DATA_DIR, { recursive: true });
+
+  const askpassPath = path.join(os.tmpdir(), `codex-askpass-${Date.now()}.sh`);
+  const askpassScript = `#!/bin/sh\nprintf '%s\\n' "${PI_PASSWORD.replace(/(["$`\\])/g, "\\$1")}"\n`;
+
+  await fs.writeFile(askpassPath, askpassScript, { mode: 0o700 });
+
+  const scpArgs = [
+    "-P",
+    String(PI_SSH_PORT),
+    "-o",
+    "PubkeyAuthentication=no",
+    "-o",
+    "PreferredAuthentications=password",
+    "-o",
+    "NumberOfPasswordPrompts=1",
+    `${PI_USER}@${PI_HOST}:${PI_CSV_PATH}`,
+    PACKAGES_CSV_PATH
+  ];
+
+  try {
+    await runProcess("setsid", ["-w", "scp", ...scpArgs], {
+      env: {
+        ...process.env,
+        SSH_ASKPASS: askpassPath,
+        SSH_ASKPASS_REQUIRE: "force",
+        DISPLAY: process.env.DISPLAY || "codex:0"
+      }
+    });
+
+    return { targetPath: PACKAGES_CSV_PATH };
+  } catch (error) {
+    if (error && error.code === "ENOENT") {
+      throw new Error("OpenSSH tools are required for password auth (missing setsid/scp on this server).");
+    }
+
+    throw error;
+  } finally {
+    await fs.rm(askpassPath, { force: true });
+  }
 }
 
 module.exports = {

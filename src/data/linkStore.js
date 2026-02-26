@@ -19,14 +19,26 @@ const categories = [
       {
         id: "powerschool",
         name: "PowerSchool",
-        url: "https://www.powerschool.com/",
+        url: "https://oxfordcs.powerschool.com/admin/home.html",
         meta: "SIS / attendance / student info"
       },
       {
         id: "google-drive",
-        name: "Google Drive",
-        url: "https://drive.google.com/",
+        name: "IT  Drive",
+        url: "https://drive.google.com/drive/folders/1QFpMlU0nzf-JIolfMwbMRPaqseKdZHLB",
         meta: "Files, docs, and shared folders"
+      },
+      {
+        id: "incident-iq",
+        name: "Incident IQ",
+        url: "https://brad.oxboe.com/iiq/",
+        meta: "Help desk tickets and asset context"
+      },
+      {
+        id: "mosyle",
+        name: "Mosyle",
+        url: "https://myschool.mosyle.com/",
+        meta: "Apple device management"
       }
     ]
   },
@@ -39,7 +51,7 @@ const categories = [
         id: "apple-school-manager",
         name: "Apple School Manager",
         url: "https://school.apple.com/",
-        meta: "Managed Apple IDs and enrollment"
+        meta: "Managed Apple IDs"
       },
       {
         id: "google-admin",

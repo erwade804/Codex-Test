@@ -94,6 +94,32 @@ async function requestHandler(req, res) {
     return;
   }
 
+  if (pathname === "/nginx" || pathname === "/nginx/") {
+    res.writeHead(302, { Location: "/legacy/" });
+    res.end();
+    return;
+  }
+
+  if (pathname === "/legacy") {
+    res.writeHead(302, { Location: "/legacy/" });
+    res.end();
+    return;
+  }
+
+  if (pathname === "/legacy/") {
+    sendFile(res, path.join(LEGACY_PUBLIC_DIR, "index.html"));
+    return;
+  }
+
+  if (pathname.startsWith("/legacy/")) {
+    const legacyAssetPath = pathname.slice("/legacy/".length);
+    if (tryServeStaticFile(res, LEGACY_PUBLIC_DIR, legacyAssetPath)) {
+      return;
+    }
+
+    sendJson(res, 404, { error: "File not found" });
+    return;
+  }
 
   if (pathname === "/") {
     sendFile(res, path.join(PUBLIC_DIR, "index.html"));

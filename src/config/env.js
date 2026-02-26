@@ -1,4 +1,4 @@
-const PORT = Number(process.env.PORT) || 4173;
+const PORT = Number(process.env.PORT) || 80;
 
 module.exports = {
   PORT

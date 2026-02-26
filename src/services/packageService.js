@@ -12,6 +12,7 @@ const {
 } = require("../config/env");
 
 const PACKAGES_CSV_PATH = path.join(DATA_DIR, "packages.csv");
+const PYTHON_SYNC_SCRIPT_PATH = path.join(__dirname, "..", "python", "csvService.py");
 
 function parseCsv(content) {
   const [headerLine, ...rows] = content
@@ -95,10 +96,12 @@ async function syncPackagesFromPi() {
       }
     });
 
+    await runProcess(process.env.PYTHON_BIN || "python3", [PYTHON_SYNC_SCRIPT_PATH]);
+
     return { targetPath: PACKAGES_CSV_PATH };
   } catch (error) {
     if (error && error.code === "ENOENT") {
-      throw new Error("OpenSSH tools are required for password auth (missing setsid/scp on this server).");
+      throw new Error("OpenSSH tools and Python are required for package sync (missing setsid/scp/python3 on this server).");
     }
 
     throw error;

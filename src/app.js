@@ -139,25 +139,46 @@ async function requestHandler(req, res) {
         .join("");
       const header = csv.headers.map((title) => `<th>${title}</th>`).join("");
       const html = `<!doctype html>
-      <html>
+      <html lang="en">
         <head>
           <meta charset="utf-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <title>Packages CSV</title>
-          <style>
-            body { font-family: system-ui, sans-serif; margin: 2rem; background:#111827; color:#f9fafb; }
-            table { border-collapse: collapse; width: 100%; background:#1f2937; }
-            th, td { border: 1px solid #374151; padding: 0.5rem; text-align: left; }
-            th { background:#0f172a; }
-          </style>
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+          <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+          />
+          <link rel="stylesheet" href="/styles.css" />
         </head>
         <body>
-          <h1>/data/packages.csv</h1>
-          <p>Use <code>POST /api/v1/packages/sync</code> to pull the latest file from your Raspberry Pi.</p>
-          <table>
-            <thead><tr>${header}</tr></thead>
-            <tbody>${rows}</tbody>
-          </table>
+          <div class="bg-glow bg-glow-pink"></div>
+          <div class="bg-glow bg-glow-blue"></div>
+
+          <main class="container">
+            <header class="hero hero-slim">
+              <p class="eyebrow">Operations Data</p>
+              <h1>Packages CSV</h1>
+              <p class="subtitle">
+                Current rows from <code>/data/packages.csv</code>. Use
+                <code>POST /api/v1/packages/sync</code> to pull the latest file from your Raspberry Pi.
+              </p>
+              <div class="toolbar toolbar-inline">
+                <a class="text-link" href="/">← Back to Link Hub</a>
+                <a class="text-link" href="/endpoints.html">Open Endpoint Explorer →</a>
+              </div>
+            </header>
+
+            <section class="category-card packages-card" aria-label="Packages table">
+              <div class="table-scroll">
+                <table class="data-table">
+                  <thead><tr>${header}</tr></thead>
+                  <tbody>${rows}</tbody>
+                </table>
+              </div>
+            </section>
+          </main>
         </body>
       </html>`;
       res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });

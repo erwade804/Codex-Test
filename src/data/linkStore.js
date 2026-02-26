@@ -7,25 +7,25 @@ const categories = [
       {
         id: "powerschool",
         name: "PowerSchool",
-        url: "https://www.powerschool.com/",
+        url: "https://oxfordcs.powerschool.com/admin/home.html",
         meta: "SIS / attendance / student info"
       },
       {
         id: "google-drive",
-        name: "Google Drive",
-        url: "https://drive.google.com/",
+        name: "IT  Drive",
+        url: "https://drive.google.com/drive/folders/1QFpMlU0nzf-JIolfMwbMRPaqseKdZHLB",
         meta: "Files, docs, and shared folders"
       },
       {
         id: "incident-iq",
         name: "Incident IQ",
-        url: "https://www.incidentiq.com/",
+        url: "https://brad.oxboe.com/iiq/",
         meta: "Help desk tickets and asset context"
       },
       {
         id: "mosyle",
         name: "Mosyle",
-        url: "https://my.mosyle.com/",
+        url: "https://myschool.mosyle.com/",
         meta: "Apple device management"
       }
     ]
@@ -39,7 +39,7 @@ const categories = [
         id: "apple-school-manager",
         name: "Apple School Manager",
         url: "https://school.apple.com/",
-        meta: "Managed Apple IDs and enrollment"
+        meta: "Managed Apple IDs"
       },
       {
         id: "google-admin",
@@ -57,14 +57,14 @@ const categories = [
       {
         id: "brads-site",
         name: "Brad's Site",
-        url: "https://example.local/",
-        meta: "Local documentation or utilities"
+        url: "https://brad.oxboe.com/",
+        meta: "Brad's tools"
       },
       {
-        id: "master-ops-sheet",
-        name: "Master Operations Sheet",
-        url: "#",
-        meta: "Replace with your Google Sheet URL"
+        id: "master-repair-sheet",
+        name: "Master Repair Sheet",
+        url: "https://docs.google.com/spreadsheets/d/1UyWUk7dGL9UhWfMxWRARNcTSuFlRbM7jvyKEjJoDHM0/edit?gid=669326704#gid=669326704",
+        meta: "Master Repair Sheet"
       }
     ]
   }

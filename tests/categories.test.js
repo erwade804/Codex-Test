@@ -6,6 +6,7 @@ const os = require("node:os");
 const path = require("node:path");
 const { requestHandler } = require("../src/app");
 const { scaffoldEndpoint } = require("../src/services/scaffoldService");
+const { PACKAGES_CSV_PATH } = require("../src/services/packageService");
 
 function makeRequest(server, method, requestPath, payload) {
   return new Promise((resolve, reject) => {
@@ -46,6 +47,9 @@ function makeRequest(server, method, requestPath, payload) {
 }
 
 test("API routes work", async () => {
+  fs.mkdirSync(path.dirname(PACKAGES_CSV_PATH), { recursive: true });
+  fs.writeFileSync(PACKAGES_CSV_PATH, "name,version\nalpha,1.0.0\nbeta,2.0.0\n", "utf8");
+
   const server = http.createServer((req, res) => requestHandler(req, res));
   await new Promise((resolve) => server.listen(0, resolve));
 
@@ -79,6 +83,14 @@ test("API routes work", async () => {
   assert.equal(endpointPage.status, 200);
   assert.match(endpointPage.body, /Endpoint Explorer/);
 
+  const packagesApi = await makeRequest(server, "GET", "/api/v1/packages");
+  assert.equal(packagesApi.status, 200);
+  assert.deepEqual(packagesApi.body.data.headers, ["name", "version"]);
+
+  const packagesPage = await makeRequest(server, "GET", "/packages");
+  assert.equal(packagesPage.status, 200);
+  assert.match(packagesPage.body, /alpha/);
+
   const scaffoldPreview = await makeRequest(server, "POST", "/api/v1/scaffold/endpoint", {
     resource: "device checkout",
     dryRun: true
@@ -88,6 +100,7 @@ test("API routes work", async () => {
   assert.equal(scaffoldPreview.body.resource.camelCase, "deviceCheckout");
 
   await new Promise((resolve) => server.close(resolve));
+  fs.rmSync(PACKAGES_CSV_PATH, { force: true });
 });
 
 test("scaffold service writes boilerplate files", () => {

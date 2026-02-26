@@ -3,6 +3,16 @@ const path = require("node:path");
 const { routeApi } = require("./routes");
 
 const PUBLIC_DIR = path.join(__dirname, "..", "public");
+const LEGACY_PUBLIC_DIR = path.join(PUBLIC_DIR, "legacy");
+
+const CONTENT_TYPES = {
+  ".css": "text/css; charset=utf-8",
+  ".html": "text/html; charset=utf-8",
+  ".js": "application/javascript; charset=utf-8",
+  ".json": "application/json; charset=utf-8",
+  ".svg": "image/svg+xml",
+  ".txt": "text/plain; charset=utf-8"
+};
 
 function sendJson(res, status, payload) {
   const body = JSON.stringify(payload);
@@ -15,14 +25,7 @@ function sendJson(res, status, payload) {
 
 function sendFile(res, filePath) {
   const ext = path.extname(filePath);
-  const contentType =
-    ext === ".html"
-      ? "text/html; charset=utf-8"
-      : ext === ".css"
-      ? "text/css; charset=utf-8"
-      : ext === ".js"
-      ? "application/javascript; charset=utf-8"
-      : "text/plain; charset=utf-8";
+  const contentType = CONTENT_TYPES[ext] || "application/octet-stream";
 
   fs.readFile(filePath, (error, data) => {
     if (error) {
@@ -56,6 +59,22 @@ function parseBody(req) {
   });
 }
 
+function tryServeStaticFile(res, baseDir, requestPath) {
+  const normalizedPath = path.normalize(requestPath).replace(/^([/\\])+/, "");
+  const absolutePath = path.join(baseDir, normalizedPath);
+
+  if (!absolutePath.startsWith(baseDir)) {
+    return false;
+  }
+
+  if (!fs.existsSync(absolutePath) || !fs.statSync(absolutePath).isFile()) {
+    return false;
+  }
+
+  sendFile(res, absolutePath);
+  return true;
+}
+
 async function requestHandler(req, res) {
   const url = new URL(req.url, "http://localhost");
   const pathname = url.pathname;
@@ -77,14 +96,39 @@ async function requestHandler(req, res) {
     return;
   }
 
+  if (pathname === "/nginx" || pathname === "/nginx/") {
+    res.writeHead(302, { Location: "/legacy/" });
+    res.end();
+    return;
+  }
+
+  if (pathname === "/legacy") {
+    res.writeHead(302, { Location: "/legacy/" });
+    res.end();
+    return;
+  }
+
+  if (pathname === "/legacy/") {
+    sendFile(res, path.join(LEGACY_PUBLIC_DIR, "index.html"));
+    return;
+  }
+
+  if (pathname.startsWith("/legacy/")) {
+    const legacyAssetPath = pathname.slice("/legacy/".length);
+    if (tryServeStaticFile(res, LEGACY_PUBLIC_DIR, legacyAssetPath)) {
+      return;
+    }
+
+    sendJson(res, 404, { error: "File not found" });
+    return;
+  }
+
   if (pathname === "/") {
     sendFile(res, path.join(PUBLIC_DIR, "index.html"));
     return;
   }
 
-  const requestedPath = path.join(PUBLIC_DIR, pathname);
-  if (requestedPath.startsWith(PUBLIC_DIR) && fs.existsSync(requestedPath) && fs.statSync(requestedPath).isFile()) {
-    sendFile(res, requestedPath);
+  if (tryServeStaticFile(res, PUBLIC_DIR, pathname)) {
     return;
   }
 

@@ -70,6 +70,21 @@ test("API routes work", async () => {
   assert.equal(one.body.data.id, "security-filtering");
 
 
+
+  const nginxRedirect = await makeRequest(server, "GET", "/nginx");
+  assert.equal(nginxRedirect.status, 302);
+
+  const legacyRedirect = await makeRequest(server, "GET", "/legacy");
+  assert.equal(legacyRedirect.status, 302);
+
+  const legacyPage = await makeRequest(server, "GET", "/legacy/");
+  assert.equal(legacyPage.status, 200);
+  assert.match(legacyPage.body, /Important Links/);
+
+  const legacyStyles = await makeRequest(server, "GET", "/legacy/index.css");
+  assert.equal(legacyStyles.status, 200);
+  assert.match(legacyStyles.body, /:root/);
+
   const endpointPage = await makeRequest(server, "GET", "/endpoints.html");
   assert.equal(endpointPage.status, 200);
   assert.match(endpointPage.body, /Endpoint Explorer/);

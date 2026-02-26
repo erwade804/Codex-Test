@@ -27,6 +27,12 @@ const categories = [
         name: "Mosyle",
         url: "https://myschool.mosyle.com/",
         meta: "Apple device management"
+      },
+      {
+        id: "google-keep",
+        name: "Google Keep",
+        url: "https://keep.google.com/",
+        meta: "IT Keep"
       }
     ]
   },

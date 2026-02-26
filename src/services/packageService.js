@@ -41,17 +41,14 @@ function syncPackagesFromPi() {
       return;
     }
 
-    if (!PI_PASSWORD && !PI_SSH_KEY_PATH) {
-      reject(new Error("Provide PI_PASSWORD or PI_SSH_KEY_PATH to authenticate to Raspberry Pi"));
+    if (!PI_PASSWORD) {
+      reject(new Error("Provide PI_PASSWORD to authenticate to Raspberry Pi"));
       return;
     }
 
     fs.mkdir(DATA_DIR, { recursive: true })
       .then(() => {
         const scpArgs = ["-P", String(PI_SSH_PORT)];
-        if (PI_SSH_KEY_PATH) {
-          scpArgs.push("-i", PI_SSH_KEY_PATH);
-        }
 
         scpArgs.push(`${PI_USER}@${PI_HOST}:${PI_CSV_PATH}`, PACKAGES_CSV_PATH);
 

@@ -31,18 +31,18 @@ Set these environment variables for sync:
 
 - `PI_HOST` (example `192.168.1.20`)
 - `PI_USER` (example `pi`)
-- `PI_PASSWORD` (required if you are using username/password auth)
+- `PI_PASSWORD` (required for password-based sync auth)
 - `PI_CSV_PATH` (default `/data/packages.csv`)
 - `PI_SSH_PORT` (default `22`)
-- `PI_SSH_KEY_PATH` (optional path to private key, alternative to `PI_PASSWORD`)
 - `DATA_DIR` (default `/data`)
 
-Example:
+Example (password auth):
 
 ```bash
 PI_HOST=192.168.1.20 PI_USER=pi PI_PASSWORD='your-pi-password' npm run dev
 curl -X POST http://localhost:4173/api/v1/packages/sync
 ```
+
 
 ### Scaffold endpoint usage
 

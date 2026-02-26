@@ -1,7 +1,8 @@
 const categoryController = require("../controllers/categoryController");
 const scaffoldController = require("../controllers/scaffoldController");
+const packageController = require("../controllers/packageController");
 
-function routeApi({ method, pathname, body }) {
+async function routeApi({ method, pathname, body }) {
   if (method === "GET" && pathname === "/api/health") {
     return { status: 200, body: { status: "ok" } };
   }
@@ -21,6 +22,14 @@ function routeApi({ method, pathname, body }) {
 
   if (method === "POST" && pathname === "/api/v1/scaffold/endpoint") {
     return scaffoldController.createEndpointScaffold(body);
+  }
+
+  if (method === "GET" && pathname === "/api/v1/packages") {
+    return packageController.getPackages();
+  }
+
+  if (method === "POST" && pathname === "/api/v1/packages/sync") {
+    return packageController.syncPackages();
   }
 
   return null;

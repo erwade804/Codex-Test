@@ -57,8 +57,8 @@ const categories = [
   },
   {
     id: "legacy-ops-links",
-    title: "Legacy Ops Links",
-    description: "Former legacy-home shortcuts now organized in the modern dashboard.",
+    title: "Random links",
+    description: "Random",
     links: [
       {
         id: "brads-desk",
@@ -83,6 +83,12 @@ const categories = [
         name: "LifeLink",
         url: "https://lifelink.lifenetsystems.com/",
         meta: "AED support portal"
+      },
+      {
+        id: "destiny",
+        name: "Destiny",
+        url: "https://destiny.k12.al.us/",
+        meta: "Destiny"
       }
     ]
   }

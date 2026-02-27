@@ -4,7 +4,6 @@ const { routeApi } = require("./routes");
 const { readPackagesCsv } = require("./services/packageService");
 
 const PUBLIC_DIR = path.join(__dirname, "..", "public");
-const LEGACY_PUBLIC_DIR = path.join(PUBLIC_DIR, "legacy");
 const CONTENT_TYPES = {
   ".css": "text/css; charset=utf-8",
   ".html": "text/html; charset=utf-8",
@@ -99,27 +98,6 @@ async function requestHandler(req, res) {
   if (pathname === "/nginx" || pathname === "/nginx/") {
     res.writeHead(302, { Location: "/legacy/" });
     res.end();
-    return;
-  }
-
-  if (pathname === "/legacy") {
-    res.writeHead(302, { Location: "/legacy/" });
-    res.end();
-    return;
-  }
-
-  if (pathname === "/legacy/") {
-    sendFile(res, path.join(LEGACY_PUBLIC_DIR, "index.html"));
-    return;
-  }
-
-  if (pathname.startsWith("/legacy/")) {
-    const legacyAssetPath = pathname.slice("/legacy/".length);
-    if (tryServeStaticFile(res, LEGACY_PUBLIC_DIR, legacyAssetPath)) {
-      return;
-    }
-
-    sendJson(res, 404, { error: "File not found" });
     return;
   }
 

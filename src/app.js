@@ -128,6 +128,12 @@ async function requestHandler(req, res) {
     return;
   }
 
+  if (pathname === "/packages/") {
+    res.writeHead(302, { Location: "/packages" });
+    res.end();
+    return;
+  }
+
   if (pathname === "/packages") {
     try {
       const csv = await readPackagesCsv();

@@ -122,3 +122,20 @@ test("scaffold service writes boilerplate files", () => {
 
   fs.rmSync(tmpRoot, { recursive: true, force: true });
 });
+
+test("packages API falls back when primary csv is empty", async () => {
+  fs.mkdirSync(path.dirname(PACKAGES_CSV_PATH), { recursive: true });
+  fs.writeFileSync(PACKAGES_CSV_PATH, "", "utf8");
+
+  const server = http.createServer((req, res) => requestHandler(req, res));
+  await new Promise((resolve) => server.listen(0, resolve));
+
+  const packagesApi = await makeRequest(server, "GET", "/api/v1/packages");
+  assert.equal(packagesApi.status, 200);
+  assert.ok(packagesApi.body.data.headers.length > 0);
+  assert.ok(packagesApi.body.data.rows.length > 0);
+
+  await new Promise((resolve) => server.close(resolve));
+  fs.rmSync(PACKAGES_CSV_PATH, { force: true });
+});
+

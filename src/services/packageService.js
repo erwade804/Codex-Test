@@ -12,7 +12,18 @@ const {
 } = require("../config/env");
 
 const PACKAGES_CSV_PATH = path.join(DATA_DIR, "packages.csv");
+const LOCAL_PACKAGES_CSV_PATH = path.join(__dirname, "..", "data", "packages.csv");
 const PYTHON_SYNC_SCRIPT_PATH = "src/python/csvService.py";
+
+async function resolvePackagesCsvPath() {
+  try {
+    await fs.access(PACKAGES_CSV_PATH);
+    return PACKAGES_CSV_PATH;
+  } catch {
+    await fs.access(LOCAL_PACKAGES_CSV_PATH);
+    return LOCAL_PACKAGES_CSV_PATH;
+  }
+}
 
 function parseCsv(content) {
   const [headerLine, ...rows] = content
@@ -31,8 +42,20 @@ function parseCsv(content) {
 }
 
 async function readPackagesCsv() {
-  const csv = await fs.readFile(PACKAGES_CSV_PATH, "utf8");
-  return parseCsv(csv);
+  const csvPath = await resolvePackagesCsvPath();
+  const csv = await fs.readFile(csvPath, "utf8");
+  const parsed = parseCsv(csv);
+
+  if (
+    csvPath === PACKAGES_CSV_PATH &&
+    parsed.headers.length === 0 &&
+    parsed.rows.length === 0
+  ) {
+    const fallbackCsv = await fs.readFile(LOCAL_PACKAGES_CSV_PATH, "utf8");
+    return parseCsv(fallbackCsv);
+  }
+
+  return parsed;
 }
 
 async function syncPackagesFromPi() {

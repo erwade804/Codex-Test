@@ -83,7 +83,7 @@ test("API routes work", async () => {
 
   const legacyOpsCategory = categories.body.data.find((category) => category.id === "legacy-ops-links");
   assert.ok(legacyOpsCategory);
-  assert.equal(legacyOpsCategory.title, "Legacy Ops Links");
+  assert.equal(legacyOpsCategory.title, "Random links");
   assert.ok(legacyOpsCategory.links.some((link) => link.name === "LifeLink"));
 
   const endpointPage = await makeRequest(server, "GET", "/endpoints.html");

@@ -11,7 +11,13 @@ const CONTENT_TYPES = {
   ".js": "application/javascript; charset=utf-8",
   ".json": "application/json; charset=utf-8",
   ".svg": "image/svg+xml",
-  ".txt": "text/plain; charset=utf-8"
+  ".txt": "text/plain; charset=utf-8",
+  ".avif": "image/avif",
+  ".gif": "image/gif",
+  ".jpeg": "image/jpeg",
+  ".jpg": "image/jpeg",
+  ".png": "image/png",
+  ".webp": "image/webp"
 };
 
 function sendJson(res, status, payload) {
@@ -125,6 +131,11 @@ async function requestHandler(req, res) {
 
   if (pathname === "/") {
     sendFile(res, path.join(PUBLIC_DIR, "index.html"));
+    return;
+  }
+
+  if (pathname === "/photos") {
+    sendFile(res, path.join(PUBLIC_DIR, "photos.html"));
     return;
   }
 

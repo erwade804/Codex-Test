@@ -7,6 +7,10 @@ const path = require("node:path");
 const { requestHandler } = require("../src/app");
 const { scaffoldEndpoint } = require("../src/services/scaffoldService");
 const { PACKAGES_CSV_PATH } = require("../src/services/packageService");
+const { PHOTOS_DIR } = require("../src/services/photoService");
+
+const TINY_PNG_BASE64 =
+  "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO7sQ1gAAAAASUVORK5CYII=";
 
 function makeRequest(server, method, requestPath, payload) {
   return new Promise((resolve, reject) => {
@@ -49,6 +53,9 @@ function makeRequest(server, method, requestPath, payload) {
 test("API routes work", async () => {
   fs.mkdirSync(path.dirname(PACKAGES_CSV_PATH), { recursive: true });
   fs.writeFileSync(PACKAGES_CSV_PATH, "name,version\nalpha,1.0.0\nbeta,2.0.0\n", "utf8");
+  fs.mkdirSync(PHOTOS_DIR, { recursive: true });
+  fs.writeFileSync(path.join(PHOTOS_DIR, "sample-photo.png"), Buffer.from(TINY_PNG_BASE64, "base64"));
+  fs.writeFileSync(path.join(PHOTOS_DIR, "ignore-me.txt"), "not an image", "utf8");
 
   const server = http.createServer((req, res) => requestHandler(req, res));
   await new Promise((resolve) => server.listen(0, resolve));
@@ -91,6 +98,14 @@ test("API routes work", async () => {
   assert.equal(packagesPage.status, 200);
   assert.match(packagesPage.body, /alpha/);
 
+  const photosApi = await makeRequest(server, "GET", "/api/v1/photos");
+  assert.equal(photosApi.status, 200);
+  assert.deepEqual(photosApi.body.data, [{ name: "sample-photo.png", url: "/photos/sample-photo.png" }]);
+
+  const photosPage = await makeRequest(server, "GET", "/photos");
+  assert.equal(photosPage.status, 200);
+  assert.match(photosPage.body, /Photo Wall/);
+
   const scaffoldPreview = await makeRequest(server, "POST", "/api/v1/scaffold/endpoint", {
     resource: "device checkout",
     dryRun: true
@@ -101,6 +116,8 @@ test("API routes work", async () => {
 
   await new Promise((resolve) => server.close(resolve));
   fs.rmSync(PACKAGES_CSV_PATH, { force: true });
+  fs.rmSync(path.join(PHOTOS_DIR, "sample-photo.png"), { force: true });
+  fs.rmSync(path.join(PHOTOS_DIR, "ignore-me.txt"), { force: true });
 });
 
 test("scaffold service writes boilerplate files", () => {
@@ -137,5 +154,7 @@ test("packages API falls back when primary csv is empty", async () => {
 
   await new Promise((resolve) => server.close(resolve));
   fs.rmSync(PACKAGES_CSV_PATH, { force: true });
+  fs.rmSync(path.join(PHOTOS_DIR, "sample-photo.png"), { force: true });
+  fs.rmSync(path.join(PHOTOS_DIR, "ignore-me.txt"), { force: true });
 });
 

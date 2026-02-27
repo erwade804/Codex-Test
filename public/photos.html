@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>School IT Photo Wall</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+
+<body>
+  <div class="bg-glow bg-glow-pink"></div>
+  <div class="bg-glow bg-glow-blue"></div>
+
+  <main class="container">
+    <header class="hero hero-slim">
+      <p class="eyebrow">Media</p>
+      <h1>Photo Wall</h1>
+      <p class="subtitle">Drop image files into <code>public/photos</code> and this page will automatically list all of them.</p>
+      <div class="toolbar toolbar-inline">
+        <a class="text-link" href="/">← Back to Link Hub</a>
+      </div>
+    </header>
+
+    <section id="photoGrid" class="photo-grid" aria-live="polite"></section>
+  </main>
+
+  <script src="/photos.js"></script>
+</body>
+
+</html>

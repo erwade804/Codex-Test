@@ -306,3 +306,33 @@ h1 {
 .data-table tbody tr:nth-child(even) {
   background: rgba(255, 255, 255, 0.02);
 }
+
+
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.9rem;
+}
+
+.photo-card {
+  margin: 0;
+  border: 1px solid var(--panel-border);
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(17, 20, 33, 0.84);
+}
+
+.photo-image {
+  display: block;
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+.photo-caption {
+  margin: 0;
+  padding: 0.65rem 0.8rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+  overflow-wrap: anywhere;
+}

@@ -1,6 +1,7 @@
 const categoryController = require("../controllers/categoryController");
 const scaffoldController = require("../controllers/scaffoldController");
 const packageController = require("../controllers/packageController");
+const photoController = require("../controllers/photoController");
 
 async function routeApi({ method, pathname, body }) {
   if (method === "GET" && pathname === "/api/health") {
@@ -30,6 +31,10 @@ async function routeApi({ method, pathname, body }) {
 
   if (method === "POST" && pathname === "/api/v1/packages/sync") {
     return packageController.syncPackages();
+  }
+
+  if (method === "GET" && pathname === "/api/v1/photos") {
+    return photoController.listPhotos();
   }
 
   return null;

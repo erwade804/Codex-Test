@@ -81,6 +81,15 @@ function tryServeStaticFile(res, baseDir, requestPath) {
 }
 
 async function requestHandler(req, res) {
+
+
+  const [first, second, third, fourth] = req.socket.remoteAddress.split(".");
+  if (third == "34" || third == "35") {
+  }
+  else {
+    console.log("Request from non-IT VLAN: " + req.socket.remoteAddress);
+    res.status(401).send("Unauthorized access.");
+  }
   const url = new URL(req.url, "http://localhost");
   const pathname = url.pathname;
 
@@ -101,11 +110,6 @@ async function requestHandler(req, res) {
     return;
   }
 
-  if (pathname === "/nginx" || pathname === "/nginx/") {
-    res.writeHead(302, { Location: "/legacy/" });
-    res.end();
-    return;
-  }
 
   if (pathname === "/") {
     sendFile(res, path.join(PUBLIC_DIR, "index.html"));

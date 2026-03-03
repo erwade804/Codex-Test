@@ -87,8 +87,7 @@ async function requestHandler(req, res) {
 
   const [first, second, third, fourth] = req.socket.remoteAddress.split(".");
 
-  if ((third == "34" || third == "35") && DEV) {
-    console.log(DEV && true);
+  if ((third == "34" || third == "35") || !DEV) {
   }
   else {
     console.log("Request from non-IT VLAN: " + req.socket.remoteAddress);

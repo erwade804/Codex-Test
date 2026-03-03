@@ -1,6 +1,6 @@
 const { syncPackagesFromPi } = require("./packageService");
 
-const FIVE_MINUTES_MS = 5 * 60 * 1000;
+const syncPackagesTime = 60 * 1000;
 
 function startPackageSyncCron() {
   const timer = setInterval(async () => {
@@ -10,7 +10,7 @@ function startPackageSyncCron() {
     } catch (error) {
       console.error("[cron] syncPackagesFromPi failed", error);
     }
-  }, FIVE_MINUTES_MS);
+  }, syncPackagesTime);
 
   if (typeof timer.unref === "function") {
     timer.unref();
@@ -20,6 +20,6 @@ function startPackageSyncCron() {
 }
 
 module.exports = {
-  FIVE_MINUTES_MS,
+  syncPackagesTime,
   startPackageSyncCron
 };

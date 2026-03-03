@@ -5,6 +5,8 @@ const PI_USER = process.env.PI_USER || "pi";
 const PI_PASSWORD = process.env.PI_PASSWORD || "pass";
 const PI_CSV_PATH = process.env.PI_CSV_PATH || "/barcode_project/data/packages.csv";
 const PI_SSH_PORT = Number(process.env.PI_SSH_PORT) || 22;
+const DEV = process.env.DEV || "false";
+
 
 module.exports = {
   PORT,
@@ -13,5 +15,6 @@ module.exports = {
   PI_USER,
   PI_PASSWORD,
   PI_CSV_PATH,
-  PI_SSH_PORT
+  PI_SSH_PORT,
+  DEV
 };

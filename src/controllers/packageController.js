@@ -9,16 +9,7 @@ async function getPackages() {
   }
 }
 
-async function syncPackages() {
-  try {
-    const result = await syncPackagesFromPi();
-    return { status: 200, body: { message: "packages.csv synchronized", ...result } };
-  } catch (error) {
-    return { status: 500, body: { error: error.message } };
-  }
-}
 
 module.exports = {
-  getPackages,
-  syncPackages
+  getPackages
 };

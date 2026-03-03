@@ -1,7 +1,9 @@
+require("dotenv").config();
 const fs = require("node:fs");
 const path = require("node:path");
 const { routeApi } = require("./routes");
 const { readPackagesCsv } = require("./services/packageService");
+const { DEV } = require("./config/env");
 
 const PUBLIC_DIR = path.join(__dirname, "..", "public");
 const CONTENT_TYPES = {
@@ -84,7 +86,9 @@ async function requestHandler(req, res) {
 
 
   const [first, second, third, fourth] = req.socket.remoteAddress.split(".");
-  if (third == "34" || third == "35") {
+
+  if ((third == "34" || third == "35") && DEV) {
+    console.log(DEV && true);
   }
   else {
     console.log("Request from non-IT VLAN: " + req.socket.remoteAddress);
@@ -160,8 +164,7 @@ async function requestHandler(req, res) {
               <p class="eyebrow">Operations Data</p>
               <h1>Packages CSV</h1>
               <p class="subtitle">
-                Current rows from <code>/data/packages.csv</code>. Use
-                <code>POST /api/v1/packages/sync</code> to pull the latest file from your Raspberry Pi.
+                Current rows from <code>/data/packages.csv</code>. Every minute, the latest file is pulled from your Raspberry Pi. You may have to refresh the page to see new results.
               </p>
               <div class="toolbar toolbar-inline">
                 <a class="text-link" href="/">← Back to Link Hub</a>

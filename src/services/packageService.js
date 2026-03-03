@@ -3,12 +3,7 @@ const path = require("node:path");
 const os = require("node:os");
 const { spawn } = require("node:child_process");
 const {
-  DATA_DIR,
-  PI_HOST,
-  PI_USER,
-  PI_PASSWORD,
-  PI_CSV_PATH,
-  PI_SSH_PORT
+  DATA_DIR
 } = require("../config/env");
 
 const PACKAGES_CSV_PATH = path.join(DATA_DIR, "packages.csv");

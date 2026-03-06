@@ -6,9 +6,9 @@ function startPackageSyncCron() {
   const timer = setInterval(async () => {
     try {
       await syncPackagesFromPi();
-      console.log("[cron] syncPackagesFromPi completed");
+      console.log("Package sync completed at " + new Date().toLocaleTimeString());
     } catch (error) {
-      console.error("[cron] syncPackagesFromPi failed", error);
+      console.error("Package sync failed at " + new Date().toLocaleTimeString(), error);
     }
   }, syncPackagesTime);
 

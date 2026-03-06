@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Request Logs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+
+<body>
+  <div class="bg-glow bg-glow-pink"></div>
+  <div class="bg-glow bg-glow-blue"></div>
+
+  <main class="container">
+    <header class="hero hero-slim">
+      <p class="eyebrow">Operations Data</p>
+      <h1>Request Logs</h1>
+      <p class="subtitle">
+        Every request is written to <code>src/request_logs.csv</code>. Use filters to narrow down by IP address,
+        endpoint path, and timestamp values.
+      </p>
+      <div class="toolbar toolbar-inline">
+        <a class="text-link" href="/">← Back to Link Hub</a>
+      </div>
+    </header>
+
+    <section class="category-card" aria-label="Request log filters">
+      <div class="log-filter-grid">
+        <label class="search-wrap" for="ipFilterInput">
+          <span>IP</span>
+          <input id="ipFilterInput" type="search" placeholder="e.g. 192.168.34" aria-label="Filter by IP" />
+        </label>
+
+        <label class="search-wrap" for="pathFilterInput">
+          <span>Path</span>
+          <input id="pathFilterInput" type="search" placeholder="e.g. /api/v1/categories" aria-label="Filter by path" />
+        </label>
+
+        <label class="search-wrap" for="timeFilterInput">
+          <span>Time</span>
+          <input id="timeFilterInput" type="search" placeholder="e.g. 2026-03-06T14" aria-label="Filter by time" />
+        </label>
+      </div>
+    </section>
+
+    <section class="category-card" aria-label="Request log table">
+      <div class="table-scroll">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>IP</th>
+              <th>Timestamp</th>
+              <th>Path</th>
+            </tr>
+          </thead>
+          <tbody id="requestLogsBody"></tbody>
+        </table>
+      </div>
+      <p id="requestLogsEmptyState" class="empty-state" hidden>No request logs matched the selected filters.</p>
+    </section>
+  </main>
+
+  <script src="/request-logs.js"></script>
+</body>
+
+</html>

@@ -3,7 +3,7 @@ const assert = require("node:assert/strict");
 
 const cronModulePath = require.resolve("../src/services/cronService");
 
-test("startPackageSyncCron schedules every 5 minutes and calls unref", () => {
+test("startPackageSyncCron schedules package sync interval and calls unref", () => {
   const originalSetInterval = global.setInterval;
   let capturedDelay;
   let capturedCallback;
@@ -20,11 +20,11 @@ test("startPackageSyncCron schedules every 5 minutes and calls unref", () => {
   };
 
   delete require.cache[cronModulePath];
-  const { FIVE_MINUTES_MS, startPackageSyncCron } = require("../src/services/cronService");
+  const { syncPackagesTime, startPackageSyncCron } = require("../src/services/cronService");
 
   const timer = startPackageSyncCron();
 
-  assert.equal(capturedDelay, FIVE_MINUTES_MS);
+  assert.equal(capturedDelay, syncPackagesTime);
   assert.equal(typeof capturedCallback, "function");
   assert.equal(typeof timer.unref, "function");
   assert.equal(unrefCalled, true);

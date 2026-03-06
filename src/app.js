@@ -4,6 +4,7 @@ const path = require("node:path");
 const { routeApi } = require("./routes");
 const { readPackagesCsv } = require("./services/packageService");
 const { DEV } = require("./config/env");
+const { appendRequestLog, readRequestLogs, getClientIp } = require("./services/requestLogService");
 
 const PUBLIC_DIR = path.join(__dirname, "..", "public");
 const CONTENT_TYPES = {
@@ -83,18 +84,38 @@ function tryServeStaticFile(res, baseDir, requestPath) {
 }
 
 async function requestHandler(req, res) {
-
-
-  const [first, second, third, fourth] = req.socket.remoteAddress.split(".");
-
-  if ((third == "34" || third == "35") || !DEV) {
-  }
-  else {
-    console.log("Request from non-IT VLAN: " + req.socket.remoteAddress);
-    res.status(401).send("Unauthorized access.");
-  }
   const url = new URL(req.url, "http://localhost");
   const pathname = url.pathname;
+  const clientIp = getClientIp(req);
+
+  appendRequestLog({
+    ip: clientIp,
+    timestamp: new Date().toISOString(),
+    pathname
+  });
+
+  const normalizedIp = (clientIp.match(/(\d+\.\d+\.\d+\.\d+)$/) || [])[1] || clientIp;
+
+  if (DEV) {
+    if (normalizedIp === "127.0.0.1" || normalizedIp === "::1") {
+      // Allow localhost during development/testing.
+    } else {
+      const ipParts = normalizedIp.split(".");
+      const third = ipParts[2];
+
+      if (!(third === "34" || third === "35")) {
+        console.log("Request from non-IT VLAN: " + clientIp);
+        sendJson(res, 401, { error: "Unauthorized access." });
+        return;
+      }
+    }
+  }
+
+  if (pathname === "/api/v1/request-logs") {
+    const logs = readRequestLogs();
+    sendJson(res, 200, { data: logs });
+    return;
+  }
 
   if (pathname.startsWith("/api")) {
     const body = ["POST", "PUT", "PATCH"].includes(req.method) ? await parseBody(req) : {};
@@ -121,6 +142,11 @@ async function requestHandler(req, res) {
 
   if (pathname === "/photos") {
     sendFile(res, path.join(PUBLIC_DIR, "photos.html"));
+    return;
+  }
+
+  if (pathname === "/request-logs") {
+    sendFile(res, path.join(PUBLIC_DIR, "request-logs.html"));
     return;
   }
 

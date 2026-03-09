@@ -87,29 +87,29 @@ async function requestHandler(req, res) {
   const url = new URL(req.url, "http://localhost");
   const pathname = url.pathname;
   const clientIp = getClientIp(req);
-
-  appendRequestLog({
-    ip: clientIp,
-    timestamp: new Date().toISOString(),
-    pathname
-  });
+  var accessGranted = false;
+  if (clientIp != "::ffff:127.0.0.1" && clientIp != "::1") {
+    appendRequestLog({
+      ip: clientIp,
+      timestamp: new Date().toISOString(),
+      pathname
+    });
+  } else {
+    accessGranted = true;
+  }
 
   const normalizedIp = (clientIp.match(/(\d+\.\d+\.\d+\.\d+)$/) || [])[1] || clientIp;
 
-  if (DEV) {
-    if (normalizedIp === "127.0.0.1" || normalizedIp === "::1") {
-      // Allow localhost during development/testing.
-    } else {
-      const ipParts = normalizedIp.split(".");
-      const third = ipParts[2];
 
-      if (!(third === "34" || third === "35")) {
-        console.log("Request from non-IT VLAN: " + clientIp);
-        sendJson(res, 401, { error: "Unauthorized access." });
-        return;
-      }
-    }
+  const ipParts = normalizedIp.split(".");
+  const third = ipParts[2];
+
+  if (!(third === "34" || third === "35") && !accessGranted) {
+    console.log("Request from unauthorized VLAN: '" + clientIp + "'");
+    sendJson(res, 401, { error: "Unauthorized access." });
+    return;
   }
+
 
   if (pathname === "/api/v1/request-logs") {
     const logs = readRequestLogs();

@@ -7,6 +7,7 @@ const { DEV } = require("./config/env");
 const { appendRequestLog, readRequestLogs, getClientIp } = require("./services/requestLogService");
 
 const PUBLIC_DIR = path.join(__dirname, "..", "public");
+const SITE_PHOTOS_DIR = path.join(__dirname, "sitePhotos");
 const CONTENT_TYPES = {
   ".css": "text/css; charset=utf-8",
   ".html": "text/html; charset=utf-8",
@@ -135,6 +136,12 @@ async function requestHandler(req, res) {
   }
 
 
+  if (pathname === "/sylveon%20icon.png" || pathname === "/sylveon icon.png") {
+    sendFile(res, path.join(SITE_PHOTOS_DIR, "sylveon icon.png"));
+    return;
+  }
+
+
   if (pathname === "/") {
     sendFile(res, path.join(PUBLIC_DIR, "index.html"));
     return;
@@ -179,6 +186,7 @@ async function requestHandler(req, res) {
             rel="stylesheet"
           />
           <link rel="stylesheet" href="/styles.css" />
+          <link rel="icon" type="image/png" href="/sylveon%20icon.png" />
         </head>
         <body>
           <div class="bg-glow bg-glow-pink"></div>

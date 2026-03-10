@@ -48,21 +48,31 @@
       </div>
     </section>
 
-    <section class="category-card" aria-label="Request log table">
-      <div class="table-scroll">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>IP</th>
-              <th>Timestamp</th>
-              <th>Path</th>
-            </tr>
-          </thead>
-          <tbody id="requestLogsBody"></tbody>
-        </table>
+    <section class="request-logs-layout" aria-label="Request log table and IP list">
+      <div class="category-card">
+        <div class="table-scroll">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>IP</th>
+                <th>Timestamp</th>
+                <th>Path</th>
+              </tr>
+            </thead>
+            <tbody id="requestLogsBody"></tbody>
+          </table>
+        </div>
       </div>
-      <p id="requestLogsEmptyState" class="empty-state" hidden>No request logs matched the selected filters.</p>
+
+      <aside class="category-card ip-list-card" aria-label="Logged IP addresses">
+        <h2 class="category-title">IPs</h2>
+        <p class="category-description">Click an IP to filter logs by that address.</p>
+        <ul id="ipList" class="ip-list"></ul>
+        <p id="ipListEmptyState" class="empty-state" hidden>No IP addresses were found.</p>
+      </aside>
     </section>
+
+    <p id="requestLogsEmptyState" class="empty-state" hidden>No request logs matched the selected filters.</p>
   </main>
 
   <script src="/request-logs.js"></script>

@@ -135,13 +135,6 @@ async function requestHandler(req, res) {
     return;
   }
 
-
-  if (pathname === "/sylveon%20icon.png" || pathname === "/sylveon icon.png") {
-    sendFile(res, path.join(SITE_PHOTOS_DIR, "sylveon icon.png"));
-    return;
-  }
-
-
   if (pathname === "/") {
     sendFile(res, path.join(PUBLIC_DIR, "index.html"));
     return;
@@ -166,12 +159,20 @@ async function requestHandler(req, res) {
   if (pathname === "/packages") {
     try {
       const csv = await readPackagesCsv();
-      const rows = csv.rows
+      let rows = csv.rows
         .map(
           (row) =>
             `<tr>${row.map((cell) => `<td>${cell}</td>`).join("")}</tr>`
-        )
-        .join("");
+        ).reverse();
+      // get active packages
+      let currentRows = [];
+      for (let i of rows) {
+        if (i.includes("SHIPPED")) {
+          break;
+        }
+        currentRows.push(i);
+      }
+
       const header = csv.headers.map((title) => `<th>${title}</th>`).join("");
       const html = `<!doctype html>
       <html lang="en">
@@ -209,7 +210,7 @@ async function requestHandler(req, res) {
               <div class="table-scroll">
                 <table class="data-table">
                   <thead><tr>${header}</tr></thead>
-                  <tbody>${rows}</tbody>
+                  <tbody>${currentRows}</tbody>
                 </table>
               </div>
             </section>

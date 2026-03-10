@@ -57,16 +57,8 @@ async function syncPackagesFromPi() {
   // run the csvservice.py script
   const python = spawn("python", [PYTHON_SYNC_SCRIPT_PATH]);
 
-  python.stdout.on("data", (data) => {
-    console.log(`stdout: ${data}`);
-  });
-
   python.stderr.on("data", (data) => {
     console.error(`stderr: ${data}`);
-  });
-
-  python.on("close", (code) => {
-    console.log(`child process exited with code ${code}`);
   });
 
   await new Promise((resolve, reject) => {

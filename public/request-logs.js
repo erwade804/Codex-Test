@@ -3,6 +3,8 @@ const emptyState = document.querySelector("#requestLogsEmptyState");
 const ipFilterInput = document.querySelector("#ipFilterInput");
 const pathFilterInput = document.querySelector("#pathFilterInput");
 const timeFilterInput = document.querySelector("#timeFilterInput");
+const ipList = document.querySelector("#ipList");
+const ipListEmptyState = document.querySelector("#ipListEmptyState");
 
 let logs = [];
 
@@ -12,6 +14,35 @@ function matchesFilter(value, query) {
   }
 
   return String(value).toLowerCase().includes(query.toLowerCase());
+}
+
+function renderIpList() {
+  const uniqueIps = [...new Set(logs.map((entry) => entry.ip))].sort((a, b) => a.localeCompare(b));
+
+  ipList.textContent = "";
+
+  if (uniqueIps.length === 0) {
+    ipListEmptyState.hidden = false;
+    return;
+  }
+
+  ipListEmptyState.hidden = true;
+
+  uniqueIps.forEach((ip) => {
+    const listItem = document.createElement("li");
+    const ipButton = document.createElement("button");
+
+    ipButton.type = "button";
+    ipButton.className = "ip-pill";
+    ipButton.textContent = ip;
+    ipButton.addEventListener("click", () => {
+      ipFilterInput.value = ip;
+      renderLogs();
+    });
+
+    listItem.append(ipButton);
+    ipList.append(listItem);
+  });
 }
 
 function renderLogs() {
@@ -49,6 +80,7 @@ async function loadLogs() {
 
   const payload = await response.json();
   logs = payload.data;
+  renderIpList();
   renderLogs();
 }
 

@@ -348,3 +348,54 @@ h1 {
 .log-filter-grid .search-wrap {
   width: 100%;
 }
+
+
+.request-logs-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 260px;
+  gap: 1rem;
+  align-items: start;
+}
+
+.ip-list-card {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.ip-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+  max-height: 460px;
+  overflow: auto;
+}
+
+.ip-list li {
+  margin: 0;
+}
+
+.ip-pill {
+  width: 100%;
+  text-align: left;
+  background: rgba(17, 20, 33, 0.84);
+  border: 1px solid #3a3557;
+  color: var(--text);
+  border-radius: 10px;
+  padding: 0.5rem 0.65rem;
+  font: inherit;
+  cursor: pointer;
+}
+
+.ip-pill:hover,
+.ip-pill:focus-visible {
+  border-color: rgba(255, 143, 199, 0.72);
+  background: rgba(26, 31, 50, 0.95);
+}
+
+@media (max-width: 900px) {
+  .request-logs-layout {
+    grid-template-columns: 1fr;
+  }
+}

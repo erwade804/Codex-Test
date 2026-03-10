@@ -159,19 +159,22 @@ async function requestHandler(req, res) {
   if (pathname === "/packages") {
     try {
       const csv = await readPackagesCsv();
-      let rows = csv.rows
+      const rows = csv.rows
         .map(
           (row) =>
             `<tr>${row.map((cell) => `<td>${cell}</td>`).join("")}</tr>`
         ).reverse();
       // get active packages
-      let currentRows = [];
+      const currentRows = [];
       for (let i of rows) {
         if (i.includes("SHIPPED")) {
           break;
         }
         currentRows.push(i);
       }
+
+      const allRowsMarkup = rows.join("");
+      const activeRowsMarkup = currentRows.join("");
 
       const header = csv.headers.map((title) => `<th>${title}</th>`).join("");
       const html = `<!doctype html>
@@ -207,14 +210,39 @@ async function requestHandler(req, res) {
             </header>
 
             <section class="category-card packages-card" aria-label="Packages table">
+              <div class="packages-toggle-wrap">
+                <span class="packages-toggle-label">Active</span>
+                <label class="packages-toggle" for="packagesViewToggle">
+                  <input id="packagesViewToggle" type="checkbox" aria-label="Toggle package view between active and all rows" />
+                  <span class="packages-toggle-slider" aria-hidden="true"></span>
+                </label>
+                <span class="packages-toggle-label">All</span>
+              </div>
               <div class="table-scroll">
                 <table class="data-table">
                   <thead><tr>${header}</tr></thead>
-                  <tbody>${currentRows}</tbody>
+                  <tbody id="packagesTableBody">${activeRowsMarkup}</tbody>
                 </table>
               </div>
             </section>
           </main>
+
+          <script>
+            const rows = ${JSON.stringify(allRowsMarkup)};
+            const currentRows = ${JSON.stringify(activeRowsMarkup)};
+            const packagesViewToggle = document.querySelector("#packagesViewToggle");
+            const packagesTableBody = document.querySelector("#packagesTableBody");
+
+            function renderPackagesRows(showAll) {
+              packagesTableBody.innerHTML = showAll ? rows : currentRows;
+            }
+
+            packagesViewToggle.addEventListener("change", (event) => {
+              renderPackagesRows(event.target.checked);
+            });
+
+            renderPackagesRows(false);
+          </script>
         </body>
       </html>`;
       res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });

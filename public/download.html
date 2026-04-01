@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Download File</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" type="image/png" href="/sylveon%20icon.png" />
+</head>
+
+<body>
+  <div class="bg-glow bg-glow-pink"></div>
+  <div class="bg-glow bg-glow-blue"></div>
+
+  <main class="container">
+    <header class="hero hero-slim">
+      <p class="eyebrow">File Tools</p>
+      <h1>Download a File</h1>
+      <p class="subtitle">
+        Click the button below to download a file from <code>/public/files</code>.
+      </p>
+      <div class="toolbar toolbar-inline">
+        <a class="text-link" href="/">← Back to Link Hub</a>
+      </div>
+    </header>
+
+    <section class="category-card">
+      <a class="link-card" href="/files/sample-download.txt" download="sample-download.txt">
+        <div>
+          <p class="link-name">Download sample file</p>
+          <p class="link-meta">Source: /public/files/sample-download.txt</p>
+        </div>
+        <span class="link-arrow">⬇</span>
+      </a>
+    </section>
+  </main>
+</body>
+
+</html>

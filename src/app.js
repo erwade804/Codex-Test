@@ -150,6 +150,11 @@ async function requestHandler(req, res) {
     return;
   }
 
+  if (pathname === "/download") {
+    sendFile(res, path.join(PUBLIC_DIR, "download.html"));
+    return;
+  }
+
   if (pathname === "/packages/") {
     res.writeHead(302, { Location: "/packages" });
     res.end();

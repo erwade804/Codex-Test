@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project Tracker</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="app-header">
+      <div class="project-actions">
+        <label class="field">
+          <span>Active project</span>
+          <select id="projectSelect"></select>
+        </label>
+        <label class="field">
+          <span>Project name</span>
+          <input id="projectName" type="text" placeholder="Project name" />
+        </label>
+        <button id="addProject" type="button">Add Project</button>
+        <button id="deleteProject" type="button" class="danger">Delete Project</button>
+      </div>
+    </header>
+
+    <main class="app-main">
+      <aside class="sidebar">
+        <h2>Project Details</h2>
+        <label class="field">
+          <span>Overview</span>
+          <textarea id="projectDetails" rows="6" placeholder="Describe the project..."></textarea>
+        </label>
+        <label class="field">
+          <span>Major points</span>
+          <textarea id="projectMajorPoints" rows="8" placeholder="Key milestones, deliverables, or risks..."></textarea>
+        </label>
+
+        <div class="image-uploader">
+          <h3>Project Image</h3>
+          <input id="projectImage" type="file" accept="image/*" />
+          <div class="image-preview" id="imagePreview">No image uploaded.</div>
+        </div>
+      </aside>
+
+      <section class="content">
+        <div class="content-header">
+          <h2>Minor Projects & Subtasks</h2>
+          <button id="addMinorProject" type="button">Add Minor Project</button>
+        </div>
+        <div id="minorProjectList" class="minor-project-list"></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
